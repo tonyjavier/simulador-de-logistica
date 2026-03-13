@@ -24,6 +24,7 @@
                 <li data-target="screen-wms"><i class="ph ph-wifi-high"></i> Rede WMS</li>
                 <li data-target="screen-db"><i class="ph ph-database"></i> Banco de Dados</li>
                 <li data-target="screen-track"><i class="ph ph-truck"></i> Rastreamento</li>
+                <li data-target="screen-quiz" class="quiz-nav-item"><i class="ph ph-game-controller"></i> Jogo/Quiz</li>
             </ul>
         </nav>
 
@@ -188,6 +189,100 @@
                             <div class="stat-box">
                                 <h4>Volume Total (Dia)</h4>
                                 <p id="trk-volume">0 MB</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tela 6: Quiz -->
+                <section id="screen-quiz" class="screen">
+                    <!-- Tela Incial do Quiz -->
+                    <div class="glass-card quiz-panel active-panel" id="quiz-start-panel">
+                        <div class="text-center">
+                            <i class="ph ph-target" style="font-size: 64px; color: var(--primary);"></i>
+                            <h2 style="font-size: 32px; margin-top: 16px; margin-bottom: 8px;">Quiz de Fundamentos da
+                                Logística Digital</h2>
+                            <p class="text-muted mb-4">Teste seus conhecimentos, aprenda brincando e conquiste o topo do
+                                ranking global!</p>
+
+                            <div class="input-group" style="max-width: 400px; margin: 0 auto;">
+                                <label style="text-align: left;">Nome do Jogador</label>
+                                <input type="text" id="quiz-player-name" placeholder="Digite seu nome (Ex: Lucas)"
+                                    style="text-align: center; font-size: 18px; padding: 16px;">
+                            </div>
+                            <button id="btn-start-quiz" class="btn-primary"
+                                style="margin-top: 24px; font-size: 18px; padding: 14px 48px;">
+                                <i class="ph ph-play-circle" style="vertical-align: middle; margin-right: 8px;"></i>
+                                Começar Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tela Principal do Quiz (Questionário) -->
+                    <div class="quiz-panel" id="quiz-question-panel">
+                        <div class="glass-card" style="border-top: 4px solid var(--primary);">
+                            <div class="quiz-header"
+                                style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+                                <span class="badge" id="quiz-progress-text"
+                                    style="background: rgba(59,130,246,0.2); color: var(--primary); padding: 4px 12px; border-radius: 12px; font-weight: 600;">Pergunta
+                                    1 de 5</span>
+                                <span class="badge" id="quiz-score-text"
+                                    style="background: rgba(16,185,129,0.2); color: var(--success); padding: 4px 12px; border-radius: 12px; font-weight: 600;">Pontos:
+                                    0</span>
+                            </div>
+                            <div class="progress-bar mb-4" style="height: 6px;">
+                                <div class="progress-fill" id="quiz-progress-bar" style="width: 20%;"></div>
+                            </div>
+
+                            <h3 id="quiz-question-title"
+                                style="font-size: 24px; margin-bottom: 32px; line-height: 1.4;">Carregando pergunta...
+                            </h3>
+
+                            <div class="quiz-options-container" id="quiz-options-container">
+                                <!-- Botões gerados por JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tela de Resumo e Ranking -->
+                    <div class="quiz-panel" id="quiz-ranking-panel">
+                        <div class="glass-card text-center" style="margin-bottom: 24px;">
+                            <i class="ph ph-trophy"
+                                style="font-size: 64px; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);"></i>
+                            <h2 style="font-size: 32px; margin-top: 16px; margin-bottom: 8px;">Fim de Jogo!</h2>
+                            <p id="quiz-final-name"
+                                style="font-size: 24px; font-weight: 600; color: var(--text-light);">Jogador</p>
+                            <p id="quiz-final-score"
+                                style="font-size: 20px; color: var(--text-muted); margin-bottom: 24px;">Acertos: X de X
+                            </p>
+
+                            <div style="display: flex; justify-content: center; gap: 16px;">
+                                <button id="btn-quiz-retry" class="btn-secondary" style="padding: 12px 24px;">Jogar
+                                    Novamente</button>
+                                <button id="btn-quiz-ranking" class="btn-primary" style="padding: 12px 24px;">Ver
+                                    Ranking Global</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-card table-card hidden" id="ranking-container"
+                            style="border-top: 4px solid #f59e0b;">
+                            <h3 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                <i class="ph ph-globe-hemisphere-west" style="color: #f59e0b;"></i> Ranking Global
+                            </h3>
+                            <div style="overflow-x: auto;">
+                                <table id="quiz-ranking-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nome do Jogador</th>
+                                            <th style="text-align: right;">Pontuação</th>
+                                            <th style="text-align: right;">Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="quiz-ranking-body">
+                                        <!-- Renderizado via JS -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

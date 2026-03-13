@@ -240,4 +240,215 @@ document.addEventListener('DOMContentLoaded', () => {
         trkVolume.textContent = mbPerDay.toFixed(2) + ' MB';
         trkResult.classList.remove('hidden');
     });
+
+    // --- Screen 6: Quiz ---
+    const quizQuestions = [
+        {
+            q: "Para formar um único caractere de texto, quantos bits são necessários?",
+            options: [
+                "1.024 bits formam 1 KB",
+                "8 bits formam 1 Byte",
+                "1.024 gotas formam um Byte",
+                "Cada bit é um copo cheio"
+            ],
+            ans: 1
+        },
+        {
+            q: "Como o computador interpreta a informação básica?",
+            options: [
+                "Sistema hexadecimal",
+                "Correntes elétricas representadas por 0 e 1",
+                "Base 10",
+                "Pulsos variáveis"
+            ],
+            ans: 1
+        },
+        {
+            q: "Qual unidade é adequada para armazenar um filme em alta definição?",
+            options: [
+                "Byte",
+                "Kilobyte",
+                "Megabyte",
+                "Gigabyte"
+            ],
+            ans: 3
+        },
+        {
+            q: "Qual é a unidade base usada para medir velocidade de rede?",
+            options: [
+                "Bytes por segundo",
+                "Bits por segundo",
+                "Megabytes por metro",
+                "Hertz"
+            ],
+            ans: 1
+        },
+        {
+            q: "Como converter velocidade de Mbps para MB/s?",
+            options: [
+                "Multiplicar por 8",
+                "Dividir por 1.024",
+                "Dividir por 8",
+                "Somar 8"
+            ],
+            ans: 2
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let currentScore = 0;
+    let currentPlayerName = "";
+
+    const quizStartPanel = document.getElementById('quiz-start-panel');
+    const quizQuestionPanel = document.getElementById('quiz-question-panel');
+    const quizRankingPanel = document.getElementById('quiz-ranking-panel');
+
+    const inputPlayerName = document.getElementById('quiz-player-name');
+    const btnStartQuiz = document.getElementById('btn-start-quiz');
+
+    const questionTitle = document.getElementById('quiz-question-title');
+    const optionsContainer = document.getElementById('quiz-options-container');
+    const progressText = document.getElementById('quiz-progress-text');
+    const scoreText = document.getElementById('quiz-score-text');
+    const progressBar = document.getElementById('quiz-progress-bar');
+
+    const finalName = document.getElementById('quiz-final-name');
+    const finalScore = document.getElementById('quiz-final-score');
+    const btnQuizRetry = document.getElementById('btn-quiz-retry');
+    const btnQuizRanking = document.getElementById('btn-quiz-ranking');
+    const rankingContainer = document.getElementById('ranking-container');
+    const rankingBody = document.getElementById('quiz-ranking-body');
+
+    function showPanel(panelId) {
+        document.querySelectorAll('.quiz-panel').forEach(p => p.classList.remove('active-panel'));
+        document.getElementById(panelId).classList.add('active-panel');
+    }
+
+    btnStartQuiz.addEventListener('click', () => {
+        const name = inputPlayerName.value.trim();
+        if (!name) {
+            alert('Por favor, digite seu nome para começar.');
+            return;
+        }
+        currentPlayerName = name;
+        currentQuestionIndex = 0;
+        currentScore = 0;
+
+        document.body.classList.add('quiz-fullscreen');
+
+        loadQuestion();
+        showPanel('quiz-question-panel');
+    });
+
+    function loadQuestion() {
+        optionsContainer.innerHTML = '';
+        const qData = quizQuestions[currentQuestionIndex];
+
+        questionTitle.textContent = qData.q;
+        progressText.textContent = `Pergunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+        scoreText.textContent = `Pontos: ${currentScore}`;
+
+        const progPct = ((currentQuestionIndex) / quizQuestions.length) * 100;
+        progressBar.style.width = progPct + '%';
+
+        qData.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option-btn';
+
+            const letters = ['A', 'B', 'C', 'D'];
+            btn.innerHTML = `<strong style="color: var(--primary); font-size: 18px; width: 24px;">${letters[idx]}</strong> <span>${opt}</span>`;
+
+            btn.addEventListener('click', () => handleAnswer(idx, btn, qData.ans));
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(selectedIndex, btnElement, correctIndex) {
+        const allBtns = optionsContainer.querySelectorAll('.quiz-option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        if (selectedIndex === correctIndex) {
+            btnElement.classList.add('correct');
+            currentScore++;
+            scoreText.textContent = `Pontos: ${currentScore}`;
+        } else {
+            btnElement.classList.add('wrong');
+            allBtns[correctIndex].classList.add('correct');
+        }
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }, 1500);
+    }
+
+    function finishQuiz() {
+        progressBar.style.width = '100%';
+        setTimeout(() => {
+            document.body.classList.remove('quiz-fullscreen');
+            showPanel('quiz-ranking-panel');
+
+            finalName.textContent = currentPlayerName;
+            finalScore.textContent = `Acertos: ${currentScore} de ${quizQuestions.length}`;
+            rankingContainer.classList.add('hidden');
+
+            saveScore(currentPlayerName, currentScore);
+        }, 500);
+    }
+
+    function saveScore(name, score) {
+        let rankings = JSON.parse(localStorage.getItem('logistics_quiz_ranking')) || [];
+        rankings.push({
+            id: Date.now(),
+            name: name,
+            score: score,
+            date: new Date().toLocaleDateString('pt-BR')
+        });
+
+        rankings.sort((a, b) => b.score - a.score);
+        localStorage.setItem('logistics_quiz_ranking', JSON.stringify(rankings));
+    }
+
+    function loadRanking() {
+        let rankings = JSON.parse(localStorage.getItem('logistics_quiz_ranking')) || [];
+        rankingBody.innerHTML = '';
+
+        if (rankings.length === 0) {
+            rankingBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum registro ainda.</td></tr>';
+            return;
+        }
+
+        rankings.slice(0, 10).forEach((r, idx) => {
+            const tr = document.createElement('tr');
+            let rankIcon = \`<span style="color: var(--text-muted); font-weight: bold;">\${idx + 1}</span>\`;
+            if (idx === 0) rankIcon = '🥇';
+            if (idx === 1) rankIcon = '🥈';
+            if (idx === 2) rankIcon = '🥉';
+            
+            tr.innerHTML = \`
+                <td>\${rankIcon}</td>
+                <td style="font-weight: 500;">\${r.name}</td>
+                <td style="text-align: right; color: var(--success); font-weight: 600;">\${r.score} pts</td>
+                <td style="text-align: right; color: var(--text-muted); font-size: 13px;">\${r.date}</td>
+            \`;
+            rankingBody.appendChild(tr);
+        });
+    }
+
+    btnQuizRanking.addEventListener('click', () => {
+        loadRanking();
+        rankingContainer.classList.remove('hidden');
+        btnQuizRanking.style.display = 'none';
+    });
+
+    btnQuizRetry.addEventListener('click', () => {
+        inputPlayerName.value = '';
+        showPanel('quiz-start-panel');
+        btnQuizRanking.style.display = 'inline-block';
+        rankingContainer.classList.add('hidden');
+    });
 });
