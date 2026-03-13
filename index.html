@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecossistema da Logística Digital</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Menu Lateral -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="ph ph-hexagon-fill logo-icon"></i>
+                <h2>LogiTech</h2>
+            </div>
+            <ul class="nav-links">
+                <li data-target="screen-eco" class="active"><i class="ph ph-git-network"></i> Ecossistema</li>
+                <li data-target="screen-bin"><i class="ph ph-binary"></i> Conversão Binária</li>
+                <li data-target="screen-wms"><i class="ph ph-wifi-high"></i> Rede WMS</li>
+                <li data-target="screen-db"><i class="ph ph-database"></i> Banco de Dados</li>
+                <li data-target="screen-track"><i class="ph ph-truck"></i> Rastreamento</li>
+            </ul>
+        </nav>
+
+        <!-- Área Principal -->
+        <main class="content">
+            <header class="topbar">
+                <h1 id="page-title">Ecossistema Logístico</h1>
+            </header>
+
+            <div class="screens-container">
+                
+                <!-- Tela 1: Ecossistema Logístico -->
+                <section id="screen-eco" class="screen active">
+                    <div class="glass-card mb-4">
+                        <p class="text-muted">Explore o fluxo de informações em uma operação logística moderna.</p>
+                    </div>
+                    <div class="flow-container">
+                        <div class="flow-nodes">
+                            <div class="node" id="node-collector"><i class="ph ph-barcode"></i><span>Coletor</span></div>
+                            <div class="arrow" id="arrow-1"><i class="ph ph-arrow-right"></i></div>
+                            <div class="node" id="node-wms"><i class="ph ph-server"></i><span>WMS</span></div>
+                            <div class="arrow" id="arrow-2"><i class="ph ph-arrow-right"></i></div>
+                            <div class="node" id="node-db"><i class="ph ph-database"></i><span>DB</span></div>
+                            <div class="arrow" id="arrow-3"><i class="ph ph-arrow-right"></i></div>
+                            <div class="node" id="node-warehouse"><i class="ph ph-buildings"></i><span>Armazém</span></div>
+                            <div class="arrow" id="arrow-4"><i class="ph ph-arrow-right"></i></div>
+                            <div class="node" id="node-transport"><i class="ph ph-truck"></i><span>Transporte</span></div>
+                        </div>
+                        <div class="flow-controls">
+                            <button data-step="collector">Simular Coleta</button>
+                            <button data-step="wms">Processamento WMS</button>
+                            <button data-step="db">Salvar Dados</button>
+                            <button data-step="warehouse">Ação no Armazém</button>
+                            <button data-step="transport">Despachar</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tela 2: Conversão Binária -->
+                <section id="screen-bin" class="screen">
+                    <div class="glass-card">
+                        <h3>Conversão Binária</h3>
+                        <p class="text-muted">Digite um número para ver como o computador o converte.</p>
+                        <div class="input-group">
+                            <label>Número Decimal</label>
+                            <input type="number" id="dec-input" placeholder="Ex: 13" min="0">
+                        </div>
+                        <button id="btn-convert-bin" class="btn-primary">Converter</button>
+                        
+                        <div id="bin-result" class="result-box hidden">
+                            <div class="result-number">1101</div>
+                            <div class="result-math">8 + 4 + 0 + 1 = 13</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tela 3: Rede WMS -->
+                <section id="screen-wms" class="screen">
+                    <div class="glass-card">
+                        <h3>Simulador de Transferência (Rede WMS)</h3>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Velocidade (Mbps)</label>
+                                <input type="number" id="net-speed" value="100" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label>Arquivo (MB)</label>
+                                <input type="number" id="net-size" value="50" min="1">
+                            </div>
+                        </div>
+                        <button id="btn-sim-net" class="btn-success">Simular</button>
+                        <div id="net-result" class="transfer-box hidden">
+                            <div class="progress-info">
+                                <span id="transfer-time">Calculando...</span>
+                                <span id="transfer-percentages">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="transfer-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tela 4: Banco de Dados -->
+                <section id="screen-db" class="screen">
+                    <div class="glass-card mb-4">
+                        <h3>Cadastro de Produto</h3>
+                        <div class="input-group"><label>Nome</label><input type="text" id="db-name"></div>
+                        <div class="input-group"><label>SKU</label><input type="text" id="db-sku"></div>
+                        <div class="input-group"><label>Qtde</label><input type="number" id="db-qty"></div>
+                        <button id="btn-db-add" class="btn-primary">Cadastrar</button>
+                    </div>
+                    <div class="glass-card">
+                        <h3>Dados Salvos</h3>
+                        <table id="db-table">
+                            <thead><tr><th>Nome</th><th>SKU</th><th>Qtd</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="db-stats">Tamanho do BD: <span id="db-size">0 KB</span></div>
+                    </div>
+                </section>
+
+                <!-- Tela 5: Rastreamento -->
+                <section id="screen-track" class="screen">
+                    <div class="glass-card">
+                        <h3>Rastreamento de Transporte</h3>
+                        <div class="input-group">
+                            <label>Caminhões em Rota</label>
+                            <input type="number" id="trk-count" value="500">
+                        </div>
+                        <button id="btn-track-calc" class="btn-primary">Calcular</button>
+                        <div id="trk-result" class="stats-grid hidden">
+                            <div class="stat-box"><h4>Volume Total (Dia)</h4><p id="trk-volume">0 MB</p></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
