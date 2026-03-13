@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     flowButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const step = e.target.getAttribute('data-step');
-            
+
             // Reset state
             Object.values(nodes).forEach(n => document.getElementById(n.id).classList.remove('active'));
             document.querySelectorAll('.arrow').forEach(a => a.classList.remove('active'));
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const keys = Object.keys(nodes);
             const index = keys.indexOf(step);
-            
+
             for (let i = 0; i <= index; i++) {
                 const key = keys[i];
                 document.getElementById(nodes[key].id).classList.add('active');
@@ -102,16 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const timeSeconds = (sizeMB * 8) / mbps;
-        
+
         netResult.classList.remove('hidden');
         transferTimeEl.textContent = `Tempo estimado: ${timeSeconds.toFixed(2)}s`;
-        
+
         clearInterval(transferInterval);
         transferFill.style.width = '0%';
         transferPercentEl.textContent = '0%';
-        
+
         let currentProgress = 0;
-        const stepDuration = 50; 
+        const stepDuration = 50;
         const totalSteps = (timeSeconds * 1000) / stepDuration;
         const progressPerStep = 100 / totalSteps;
 
@@ -127,8 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Screen 4: Banco de Dados ---
-    const dbList = [];
+    let dbList = [
+        { id: 1, name: 'Monitor Dell 27"', sku: 'MON-DEL-027', qty: 15 },
+        { id: 2, name: 'Teclado Mecânico', sku: 'TEC-MEC-001', qty: 42 },
+        { id: 3, name: 'Mouse Wireless', sku: 'MOU-WRL-005', qty: 89 }
+    ];
+    let nextId = 4;
+
     const btnDbAdd = document.getElementById('btn-db-add');
+    const btnGenSku = document.getElementById('btn-gen-sku');
     const dbName = document.getElementById('db-name');
     const dbSku = document.getElementById('db-sku');
     const dbQty = document.getElementById('db-qty');
@@ -137,23 +144,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderDbTable() {
         dbTableBody.innerHTML = '';
+
+        if (dbList.length === 0) {
+            dbTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 24px;">Nenhum produto cadastrado</td></tr>';
+            dbSizeEl.textContent = '0 Bytes';
+            return;
+        }
+
         dbList.forEach(item => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${item.name}</td>
-                <td>${item.sku}</td>
+                <td style="font-weight: 500;">${item.name}</td>
+                <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 13px;">${item.sku}</span></td>
                 <td>${item.qty}</td>
+                <td>
+                    <button class="btn-danger btn-delete" data-id="${item.id}" title="Excluir">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </td>
             `;
             dbTableBody.appendChild(tr);
         });
 
-        const bytesTotal = dbList.length * 150; // Approximated size in real life
+        // Attach event listeners for delete buttons
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idToDelete = parseInt(e.currentTarget.getAttribute('data-id'));
+                dbList = dbList.filter(item => item.id !== idToDelete);
+                renderDbTable();
+            });
+        });
+
+        const bytesTotal = dbList.length * 150; // Approximated size for demonstration
         if (bytesTotal >= 1024) {
             dbSizeEl.textContent = (bytesTotal / 1024).toFixed(2) + ' KB';
         } else {
             dbSizeEl.textContent = bytesTotal + ' Bytes';
         }
     }
+
+    // SKU Generator logic
+    btnGenSku.addEventListener('click', () => {
+        const nameVal = dbName.value.trim().toUpperCase();
+        let prefix = 'PRD';
+
+        if (nameVal.length >= 3) {
+            prefix = nameVal.substring(0, 3);
+        }
+
+        const randomNum = Math.floor(Math.random() * 999).toString().padStart(3, '0');
+        const randomStr = Math.random().toString(36).substring(2, 5).toUpperCase();
+
+        dbSku.value = `${prefix}-${randomStr}-${randomNum}`;
+    });
 
     btnDbAdd.addEventListener('click', () => {
         const name = dbName.value.trim();
@@ -165,13 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        dbList.push({ name, sku, qty });
+        dbList.push({ id: nextId++, name, sku, qty });
 
         dbName.value = '';
         dbSku.value = '';
         dbQty.value = '';
         dbName.focus();
-        
+
         renderDbTable();
     });
 

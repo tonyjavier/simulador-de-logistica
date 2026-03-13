@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Menu Lateral -->
@@ -32,7 +34,7 @@
             </header>
 
             <div class="screens-container">
-                
+
                 <!-- Tela 1: Ecossistema Logístico -->
                 <section id="screen-eco" class="screen active">
                     <div class="glass-card mb-4">
@@ -40,15 +42,18 @@
                     </div>
                     <div class="flow-container">
                         <div class="flow-nodes">
-                            <div class="node" id="node-collector"><i class="ph ph-barcode"></i><span>Coletor</span></div>
+                            <div class="node" id="node-collector"><i class="ph ph-barcode"></i><span>Coletor</span>
+                            </div>
                             <div class="arrow" id="arrow-1"><i class="ph ph-arrow-right"></i></div>
                             <div class="node" id="node-wms"><i class="ph ph-server"></i><span>WMS</span></div>
                             <div class="arrow" id="arrow-2"><i class="ph ph-arrow-right"></i></div>
                             <div class="node" id="node-db"><i class="ph ph-database"></i><span>DB</span></div>
                             <div class="arrow" id="arrow-3"><i class="ph ph-arrow-right"></i></div>
-                            <div class="node" id="node-warehouse"><i class="ph ph-buildings"></i><span>Armazém</span></div>
+                            <div class="node" id="node-warehouse"><i class="ph ph-buildings"></i><span>Armazém</span>
+                            </div>
                             <div class="arrow" id="arrow-4"><i class="ph ph-arrow-right"></i></div>
-                            <div class="node" id="node-transport"><i class="ph ph-truck"></i><span>Transporte</span></div>
+                            <div class="node" id="node-transport"><i class="ph ph-truck"></i><span>Transporte</span>
+                            </div>
                         </div>
                         <div class="flow-controls">
                             <button data-step="collector">Simular Coleta</button>
@@ -70,7 +75,7 @@
                             <input type="number" id="dec-input" placeholder="Ex: 13" min="0">
                         </div>
                         <button id="btn-convert-bin" class="btn-primary">Converter</button>
-                        
+
                         <div id="bin-result" class="result-box hidden">
                             <div class="result-number">1101</div>
                             <div class="result-math">8 + 4 + 0 + 1 = 13</div>
@@ -107,20 +112,66 @@
 
                 <!-- Tela 4: Banco de Dados -->
                 <section id="screen-db" class="screen">
-                    <div class="glass-card mb-4">
-                        <h3>Cadastro de Produto</h3>
-                        <div class="input-group"><label>Nome</label><input type="text" id="db-name"></div>
-                        <div class="input-group"><label>SKU</label><input type="text" id="db-sku"></div>
-                        <div class="input-group"><label>Qtde</label><input type="number" id="db-qty"></div>
-                        <button id="btn-db-add" class="btn-primary">Cadastrar</button>
-                    </div>
-                    <div class="glass-card">
-                        <h3>Dados Salvos</h3>
-                        <table id="db-table">
-                            <thead><tr><th>Nome</th><th>SKU</th><th>Qtd</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                        <div class="db-stats">Tamanho do BD: <span id="db-size">0 KB</span></div>
+                    <div class="db-grid">
+                        <div class="glass-card form-card">
+                            <h3>Gestão de SKUs</h3>
+                            <p class="text-muted" style="margin-bottom: 24px; font-size: 14px;">Adicione um produto ao
+                                estoque local.</p>
+
+                            <div class="input-group">
+                                <label>Nome do Produto</label>
+                                <input type="text" id="db-name" placeholder="Ex: Monitor Dell 27&quot;">
+                            </div>
+
+                            <div class="input-group">
+                                <label>SKU (Stock Keeping Unit)</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="db-sku" placeholder="Ex: MON-DEL-027">
+                                    <button class="btn-secondary" id="btn-gen-sku" title="Gerar SKU Aleatório"
+                                        style="padding: 12px 16px; margin-top: 6px;">
+                                        <i class="ph ph-magic-wand"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Quantidade</label>
+                                <input type="number" id="db-qty" placeholder="Ex: 50" min="1">
+                            </div>
+
+                            <button id="btn-db-add" class="btn-primary" style="width: 100%; margin-top: 16px;">
+                                <i class="ph ph-plus-circle"></i> Cadastrar Produto
+                            </button>
+                        </div>
+
+                        <div class="glass-card table-card">
+                            <h3>Servidor Local (WMS)</h3>
+                            <div style="overflow-x: auto;">
+                                <table id="db-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Código SKU</th>
+                                            <th>Qtd</th>
+                                            <th style="width: 50px;">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Renderizado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="db-stats"
+                                style="margin-top: 24px; display: flex; align-items: center; gap: 12px;">
+                                <i class="ph ph-hard-drives" style="font-size: 24px;"></i>
+                                <div>
+                                    <h4
+                                        style="margin:0; font-size:12px; text-transform:uppercase; color:var(--text-muted)">
+                                        Consumo de Memória</h4>
+                                    <span id="db-size" style="font-size: 18px; font-weight: 600;">0 KB</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -134,7 +185,10 @@
                         </div>
                         <button id="btn-track-calc" class="btn-primary">Calcular</button>
                         <div id="trk-result" class="stats-grid hidden">
-                            <div class="stat-box"><h4>Volume Total (Dia)</h4><p id="trk-volume">0 MB</p></div>
+                            <div class="stat-box">
+                                <h4>Volume Total (Dia)</h4>
+                                <p id="trk-volume">0 MB</p>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -143,4 +197,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
