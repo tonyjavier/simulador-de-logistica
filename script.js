@@ -424,17 +424,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         rankings.slice(0, 10).forEach((r, idx) => {
             const tr = document.createElement('tr');
-            let rankIcon = \`<span style="color: var(--text-muted); font-weight: bold;">\${idx + 1}</span>\`;
+            let rankIcon = `<span style="color: var(--text-muted); font-weight: bold;">${idx + 1}</span>`;
             if (idx === 0) rankIcon = '🥇';
             if (idx === 1) rankIcon = '🥈';
             if (idx === 2) rankIcon = '🥉';
-            
-            tr.innerHTML = \`
-                <td>\${rankIcon}</td>
-                <td style="font-weight: 500;">\${r.name}</td>
-                <td style="text-align: right; color: var(--success); font-weight: 600;">\${r.score} pts</td>
-                <td style="text-align: right; color: var(--text-muted); font-size: 13px;">\${r.date}</td>
-            \`;
+
+            tr.innerHTML = `
+                <td>${rankIcon}</td>
+                <td style="font-weight: 500;">${r.name}</td>
+                <td style="text-align: right; color: var(--success); font-weight: 600;">${r.score} pts</td>
+                <td style="text-align: right; color: var(--text-muted); font-size: 13px;">${r.date}</td>
+            `;
             rankingBody.appendChild(tr);
         });
     }
