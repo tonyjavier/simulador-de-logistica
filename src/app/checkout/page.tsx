@@ -210,8 +210,15 @@ export default function CheckoutPage() {
 
         <main className="px-4 py-5 space-y-6">
           {/* Banner */}
-          <div className="w-full h-[120px] rounded-2xl overflow-hidden shadow-sm">
-            <img src="/checkout-banner.png" alt="Checkout Delivery" className="w-full h-full object-cover" />
+          <div className="relative w-full h-[120px] rounded-2xl overflow-hidden shadow-sm flex items-center justify-center">
+            <img src="/checkout-banner.png" alt="Checkout Delivery" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="relative z-10 text-center">
+              <h2 className="font-[family-name:var(--font-noto-serif)] italic text-2xl font-bold text-white drop-shadow-md">
+                Finalize seu Pedido
+              </h2>
+              <p className="text-white/90 text-xs font-medium mt-1 drop-shadow">Falta pouco para saborear!</p>
+            </div>
           </div>
 
           {/* Delivery banner */}
