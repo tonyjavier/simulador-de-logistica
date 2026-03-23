@@ -19,8 +19,10 @@ export default function CartDrawer() {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
 
   useEffect(() => {
+    let mounted = true;
     async function loadSuggestions() {
       if (items.length === 0) return;
+      if (suggestions.length > 0) return; // don't refetch if already have them
       const ids = items.map((i) => i.id);
       const { data } = await supabase
         .from('products')
@@ -28,10 +30,11 @@ export default function CartDrawer() {
         .eq('is_active', true)
         .not('id', 'in', `(${ids.join(',')})`)
         .limit(6);
-      if (data) setSuggestions(data);
+      if (data && mounted) setSuggestions(data);
     }
     if (isDrawerOpen) loadSuggestions();
-  }, [isDrawerOpen, items]);
+    return () => { mounted = false; };
+  }, [isDrawerOpen, items, suggestions.length]);
 
   const cartTotal = total();
   const cartCount = count();

@@ -18,7 +18,7 @@ const sizeClasses = {
 export default function ProductImage({ slug, name, size = 'md', className = '' }: ProductImageProps) {
   return (
     <img
-      src={`/products/${slug}.png`}
+      src={`/products/${slug}.webp`}
       alt={name}
       loading="lazy"
       className={`object-cover ${sizeClasses[size]} ${className}`}

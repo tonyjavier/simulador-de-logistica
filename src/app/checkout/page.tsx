@@ -348,29 +348,14 @@ export default function CheckoutPage() {
                     {payment === 'pix' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                   </div>
                 </div>
-                {payment === 'pix' && settings && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="mt-3 pt-3 border-t border-outline-variant/20"
+                {payment === 'pix' && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-2 text-xs text-on-surface-variant"
                   >
-                    <div className="bg-green-50 rounded-lg p-3 flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-[10px] text-green-600 font-bold uppercase">Chave Pix</p>
-                        <p className="text-sm font-mono font-bold text-green-800">{settings.pix_key}</p>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigator.clipboard.writeText(settings.pix_key || '');
-                          addToast('Chave copiada!', 'info');
-                        }}
-                        className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
-                      >
-                        <span className="material-symbols-outlined text-green-700 text-[18px]">content_copy</span>
-                      </button>
-                    </div>
-                  </motion.div>
+                    Chave Pix será enviada pelo WhatsApp
+                  </motion.p>
                 )}
               </button>
 
