@@ -6,6 +6,7 @@ import { useSearchStore } from '@/stores/search-store';
 import { useCartStore } from '@/stores/cart-store';
 import { useToastStore } from '@/components/Toast';
 import { supabase, Product } from '@/lib/supabase';
+import ProductImage from '@/components/ProductImage';
 import Link from 'next/link';
 
 export default function SearchOverlay() {
@@ -148,14 +149,14 @@ export default function SearchOverlay() {
             {!isLoading && results.length > 0 && (
               <div className="space-y-3">
                 {results.map((p) => (
-                  <Link href={`/produto/${p.slug}`} key={p.id} onClick={close}>
+                  <Link href={`/produto/${p.slug}/`} key={p.id} onClick={close}>
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 hover:shadow-md transition-shadow cursor-pointer"
                     >
-                      <div className="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center text-2xl shrink-0">
-                        {p.emoji}
+                      <div className="w-14 h-14 bg-surface-container-low rounded-xl overflow-hidden shrink-0">
+                        <ProductImage slug={p.slug} name={p.name} size="sm" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-bold text-sm truncate">{p.name}</h4>

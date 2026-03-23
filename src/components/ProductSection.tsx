@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase, Product } from '@/lib/supabase';
 import { useCartStore } from '@/stores/cart-store';
 import { useToastStore } from '@/components/Toast';
+import ProductImage from '@/components/ProductImage';
 import Link from 'next/link';
 import CartDrawer from '@/components/CartDrawer';
 
@@ -71,16 +72,16 @@ export default function ProductSection() {
         <div className="flex overflow-x-auto no-scrollbar gap-3 px-4 pb-2 snap-x snap-mandatory">
           {loading
             ? [1, 2, 3].map((i) => (
-                <div key={i} className="min-w-[140px] h-[180px] rounded-2xl shimmer shrink-0" />
+                <div key={i} className="min-w-[140px] h-[200px] rounded-2xl shimmer shrink-0" />
               ))
             : featured.map((p) => (
-                <Link href={`/produto/${p.slug}`} key={p.id}>
+                <Link href={`/produto/${p.slug}/`} key={p.id}>
                   <motion.div
                     whileHover={{ y: -2 }}
                     className="min-w-[140px] bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow snap-start cursor-pointer border border-outline-variant/10"
                   >
-                    <div className="h-24 bg-surface-container-low flex items-center justify-center text-4xl">
-                      {p.emoji}
+                    <div className="h-[110px] bg-surface-container-low overflow-hidden">
+                      <ProductImage slug={p.slug} name={p.name} />
                     </div>
                     <div className="p-3">
                       <p className="text-xs font-bold text-on-surface leading-tight h-8 overflow-hidden line-clamp-2">
@@ -118,7 +119,7 @@ export default function ProductSection() {
         <AnimatePresence mode="popLayout">
           {loading
             ? [1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-[220px] rounded-2xl shimmer" />
+                <div key={i} className="h-[230px] rounded-2xl shimmer" />
               ))
             : filteredProducts.map((p) => (
                 <motion.div
@@ -129,16 +130,14 @@ export default function ProductSection() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <Link href={`/produto/${p.slug}`}>
+                  <Link href={`/produto/${p.slug}/`}>
                     <div className="bg-white rounded-2xl overflow-hidden border border-outline-variant/15 group hover:shadow-lg transition-shadow cursor-pointer">
-                      <div className="h-[130px] bg-surface-container-low flex items-center justify-center relative">
-                        <span className="text-5xl group-hover:scale-110 transition-transform duration-300">
-                          {p.emoji}
-                        </span>
+                      <div className="h-[130px] bg-surface-container-low overflow-hidden relative">
+                        <ProductImage slug={p.slug} name={p.name} className="group-hover:scale-105 transition-transform duration-300" />
                         <motion.button
                           whileTap={{ scale: 0.85 }}
                           onClick={(e) => handleAdd(p, e)}
-                          className="absolute bottom-2 right-2 bg-primary text-white w-8 h-8 rounded-lg shadow-lg flex items-center justify-center cursor-pointer hover:bg-primary-container transition-colors"
+                          className="absolute bottom-2 right-2 bg-primary text-white w-8 h-8 rounded-lg shadow-lg flex items-center justify-center cursor-pointer hover:bg-primary-container transition-colors z-10"
                         >
                           <span className="material-symbols-outlined text-[18px]">add</span>
                         </motion.button>
@@ -191,7 +190,6 @@ export default function ProductSection() {
         )}
       </AnimatePresence>
 
-      {/* Cart Drawer */}
       <CartDrawer />
     </>
   );

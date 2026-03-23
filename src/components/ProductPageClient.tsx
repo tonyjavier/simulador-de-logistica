@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { supabase, Product } from '@/lib/supabase';
 import { useCartStore } from '@/stores/cart-store';
 import { useToastStore, ToastProvider } from '@/components/Toast';
+import ProductImage from '@/components/ProductImage';
 import Link from 'next/link';
 
 export default function ProductPageClient() {
@@ -72,7 +73,7 @@ export default function ProductPageClient() {
     return (
       <div className="min-h-dvh bg-white flex flex-col">
         <div className="h-16 shimmer" />
-        <div className="h-[260px] shimmer" />
+        <div className="h-[280px] shimmer" />
         <div className="p-4 space-y-4">
           <div className="h-8 w-48 rounded-lg shimmer" />
           <div className="h-6 w-24 rounded-lg shimmer" />
@@ -85,7 +86,7 @@ export default function ProductPageClient() {
   if (!product) {
     return (
       <div className="min-h-dvh bg-white flex flex-col items-center justify-center gap-4">
-        <span className="text-5xl">😕</span>
+        <span className="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
         <p className="font-bold text-lg">Produto não encontrado</p>
         <button onClick={() => router.push('/')} className="text-primary font-bold cursor-pointer">
           ← Voltar ao cardápio
@@ -119,21 +120,15 @@ export default function ProductPageClient() {
           </button>
         </header>
 
+        {/* Hero Image — REAL IMAGE */}
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="w-full h-[260px] bg-surface-container flex items-center justify-center relative overflow-hidden"
+          className="w-full h-[280px] bg-surface-container relative overflow-hidden"
         >
-          <motion.span
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 200 }}
-            className="text-[100px]"
-          >
-            {product.emoji}
-          </motion.span>
+          <ProductImage slug={product.slug} name={product.name} size="hero" className="object-cover" />
           <div className="absolute bottom-4 left-4">
-            <span className="bg-secondary-container text-on-secondary-container text-[11px] font-bold px-3 py-1.5 rounded-full">
+            <span className="bg-secondary-container text-on-secondary-container text-[11px] font-bold px-3 py-1.5 rounded-full shadow-md">
               {product.category} · Popular
             </span>
           </div>
@@ -204,18 +199,23 @@ export default function ProductPageClient() {
           </div>
         </section>
 
+        {/* Combina com — with real images */}
         {related.length > 0 && (
           <section className="px-4 pb-6">
             <h3 className="font-bold text-sm mb-3">Combina com</h3>
             <div className="flex overflow-x-auto no-scrollbar gap-3 pb-2 snap-x snap-mandatory">
               {related.map((p) => (
                 <Link href={`/produto/${p.slug}/`} key={p.id}>
-                  <div className="min-w-[120px] bg-white rounded-xl border border-outline-variant/15 p-3 flex flex-col items-center text-center snap-start hover:shadow-md transition-shadow cursor-pointer">
-                    <span className="text-2xl mb-2">{p.emoji}</span>
-                    <p className="text-[11px] font-bold line-clamp-1">{p.name}</p>
-                    <p className="text-[10px] text-primary font-bold mt-0.5">
-                      R$ {p.price.toFixed(2).replace('.', ',')}
-                    </p>
+                  <div className="min-w-[120px] bg-white rounded-xl border border-outline-variant/15 overflow-hidden flex flex-col items-center text-center snap-start hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="w-full h-20 overflow-hidden">
+                      <ProductImage slug={p.slug} name={p.name} size="sm" />
+                    </div>
+                    <div className="p-2">
+                      <p className="text-[11px] font-bold line-clamp-1">{p.name}</p>
+                      <p className="text-[10px] text-primary font-bold mt-0.5">
+                        R$ {p.price.toFixed(2).replace('.', ',')}
+                      </p>
+                    </div>
                   </div>
                 </Link>
               ))}

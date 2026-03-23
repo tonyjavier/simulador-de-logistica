@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/stores/cart-store';
 import { supabase, Product } from '@/lib/supabase';
-import Link from 'next/link';
+import ProductImage from '@/components/ProductImage';
 import { useRouter } from 'next/navigation';
 import { useToastStore } from '@/components/Toast';
 
@@ -40,7 +40,6 @@ export default function CartDrawer() {
     <AnimatePresence>
       {isDrawerOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -48,7 +47,6 @@ export default function CartDrawer() {
             onClick={closeDrawer}
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] cursor-pointer"
           />
-          {/* Drawer */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -60,7 +58,6 @@ export default function CartDrawer() {
             {/* Header */}
             <div className="relative flex flex-col items-center pt-3 pb-4 border-b border-outline-variant/20 shrink-0">
               <div className="w-10 h-1 bg-outline-variant/30 rounded-full mb-3" />
-              <span className="text-3xl mb-1">🍔</span>
               <h2 className="font-[family-name:var(--font-noto-serif)] italic font-bold text-lg">
                 Seu carrinho
               </h2>
@@ -76,7 +73,7 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
               {cartCount === 0 ? (
                 <div className="text-center py-12">
-                  <span className="text-5xl mb-4 block">🛒</span>
+                  <span className="material-symbols-outlined text-[64px] text-outline-variant/40 mb-4 block">shopping_cart</span>
                   <p className="text-on-surface-variant font-medium">Seu carrinho está vazio</p>
                   <button
                     onClick={closeDrawer}
@@ -87,7 +84,6 @@ export default function CartDrawer() {
                 </div>
               ) : (
                 <>
-                  {/* Items */}
                   <div className="space-y-3">
                     <h3 className="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">
                       ITENS SELECIONADOS
@@ -103,8 +99,8 @@ export default function CartDrawer() {
                           transition={{ duration: 0.25 }}
                           className="bg-surface-container-lowest p-3 rounded-2xl shadow-sm flex items-center gap-3 border border-outline-variant/10"
                         >
-                          <div className="w-14 h-14 bg-surface-container rounded-xl flex items-center justify-center text-2xl shrink-0">
-                            {item.emoji}
+                          <div className="w-14 h-14 bg-surface-container rounded-xl overflow-hidden shrink-0">
+                            <ProductImage slug={item.slug} name={item.name} size="sm" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-bold text-on-surface text-sm truncate">{item.name}</h4>
@@ -144,25 +140,29 @@ export default function CartDrawer() {
                         {suggestions.slice(0, 4).map((p) => (
                           <div
                             key={p.id}
-                            className="min-w-[110px] bg-surface-container-low rounded-xl p-3 flex flex-col items-center text-center snap-start border border-outline-variant/10"
+                            className="min-w-[110px] bg-surface-container-low rounded-xl overflow-hidden flex flex-col items-center text-center snap-start border border-outline-variant/10"
                           >
-                            <span className="text-2xl mb-1.5">{p.emoji}</span>
-                            <p className="text-[11px] font-bold line-clamp-1">{p.name}</p>
-                            <p className="text-[10px] text-primary font-bold mt-0.5">
-                              R$ {p.price.toFixed(2).replace('.', ',')}
-                            </p>
-                            <button
-                              onClick={() => {
-                                addItem({
-                                  id: p.id, slug: p.slug, name: p.name,
-                                  price: p.price, emoji: p.emoji, image_url: p.image_url,
-                                });
-                                addToast('Adicionado ao carrinho ✓');
-                              }}
-                              className="mt-2 w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center active:scale-90 transition-transform cursor-pointer"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">add</span>
-                            </button>
+                            <div className="w-full h-16 overflow-hidden">
+                              <ProductImage slug={p.slug} name={p.name} size="sm" />
+                            </div>
+                            <div className="p-2">
+                              <p className="text-[11px] font-bold line-clamp-1">{p.name}</p>
+                              <p className="text-[10px] text-primary font-bold mt-0.5">
+                                R$ {p.price.toFixed(2).replace('.', ',')}
+                              </p>
+                              <button
+                                onClick={() => {
+                                  addItem({
+                                    id: p.id, slug: p.slug, name: p.name,
+                                    price: p.price, emoji: p.emoji, image_url: p.image_url,
+                                  });
+                                  addToast('Adicionado ao carrinho ✓');
+                                }}
+                                className="mt-1.5 w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center active:scale-90 transition-transform cursor-pointer mx-auto"
+                              >
+                                <span className="material-symbols-outlined text-[16px]">add</span>
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -203,7 +203,7 @@ export default function CartDrawer() {
                 <button
                   onClick={() => {
                     closeDrawer();
-                    router.push('/checkout');
+                    router.push('/checkout/');
                   }}
                   className="w-full h-14 bg-primary text-on-primary font-bold rounded-full shadow-lg shadow-primary/15 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >

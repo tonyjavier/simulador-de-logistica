@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Banner, supabase } from '@/lib/supabase';
+import ProductImage from '@/components/ProductImage';
 import Link from 'next/link';
 
+type BannerWithSlug = Banner & { product_slug?: string };
+
 export default function BannerCarousel() {
-  const [banners, setBanners] = useState<(Banner & { product_slug?: string })[]>([]);
+  const [banners, setBanners] = useState<BannerWithSlug[]>([]);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function BannerCarousel() {
         const mapped = data.map((b: Record<string, unknown>) => ({
           ...b,
           product_slug: (b.products as { slug: string } | null)?.slug,
-        })) as (Banner & { product_slug?: string })[];
+        })) as BannerWithSlug[];
         setBanners(mapped);
       }
     }
@@ -47,17 +50,18 @@ export default function BannerCarousel() {
 
   return (
     <div className="px-4">
-      <Link href={banner.product_slug ? `/produto/${banner.product_slug}` : '/'}>
+      <Link href={banner.product_slug ? `/produto/${banner.product_slug}/` : '/'}>
         <motion.div
           key={current}
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="relative overflow-hidden rounded-2xl p-5 flex items-center justify-between cursor-pointer"
+          className="relative overflow-hidden rounded-2xl flex items-center cursor-pointer h-[170px]"
           style={{ backgroundColor: banner.bg_color }}
         >
-          <div className="z-10 flex flex-col items-start gap-2 flex-1">
+          {/* Text content */}
+          <div className="z-10 flex flex-col items-start gap-2 flex-1 p-5">
             <span className="bg-primary px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider">
               {banner.label}
             </span>
@@ -72,9 +76,12 @@ export default function BannerCarousel() {
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </span>
           </div>
-          <div className="text-6xl drop-shadow-lg ml-2 shrink-0">
-            {banner.emoji}
-          </div>
+          {/* Real product image */}
+          {banner.product_slug && (
+            <div className="w-[130px] h-full shrink-0 overflow-hidden rounded-r-2xl">
+              <ProductImage slug={banner.product_slug} name={banner.title} size="lg" className="object-cover" />
+            </div>
+          )}
         </motion.div>
       </Link>
 
