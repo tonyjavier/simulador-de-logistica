@@ -1,26 +1,83 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: #b70011;
+  --color-primary-container: #dc2626;
+  --color-background: #fff8f7;
+  --color-surface: #fff8f7;
+  --color-surface-container: #f7ebeb;
+  --color-surface-container-low: #fdf1f1;
+  --color-surface-container-high: #f1e5e5;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #201a1b;
+  --color-on-surface-variant: #5c403c;
+  --color-secondary: #636036;
+  --color-secondary-container: #e9e5b0;
+  --color-outline: #916f6b;
+  --color-outline-variant: #e6bdb8;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #fff6f5;
+  --color-on-secondary-container: #69663c;
+  --color-error: #ba1a1a;
+  --color-whatsapp: #25D366;
+
+  --font-headline: 'Noto Serif', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .headline {
+    font-family: var(--font-headline);
+    font-style: italic;
+    font-weight: 700;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glass-dark {
+    background: rgba(220, 38, 38, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface-container-low) 0%,
+      var(--color-surface-container) 50%,
+      var(--color-surface-container-low) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
