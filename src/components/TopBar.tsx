@@ -13,7 +13,7 @@ export default function TopBar() {
     <header className="sticky top-0 z-50 glass-dark">
       <div className="flex items-center justify-between px-5 h-16">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-white text-2xl">restaurant</span>
+          <img src="/logo.png" alt="Logo O Zé Boteco" className="w-[42px] h-[42px] object-contain rounded-full shadow-sm" />
           <div className="flex flex-col">
             <h1 className="text-lg font-[family-name:var(--font-noto-serif)] italic font-bold text-white tracking-tight leading-tight">
               O Zé Boteco

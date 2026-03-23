@@ -209,9 +209,9 @@ export default function CheckoutPage() {
         </header>
 
         <main className="px-4 py-5 space-y-6">
-          {/* Logo */}
-          <div className="flex justify-center">
-            <span className="text-4xl">🍔</span>
+          {/* Banner */}
+          <div className="w-full h-[120px] rounded-2xl overflow-hidden shadow-sm">
+            <img src="/checkout-banner.png" alt="Checkout Delivery" className="w-full h-full object-cover" />
           </div>
 
           {/* Delivery banner */}
